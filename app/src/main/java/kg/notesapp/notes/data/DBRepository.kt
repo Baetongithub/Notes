@@ -10,4 +10,8 @@ interface DBRepository {
     suspend fun create(note: Note, onSuccess: () -> Unit)
     suspend fun update(note: Note, onSuccess: () -> Unit)
     suspend fun delete(note: Note, onSuccess: () -> Unit)
+
+    fun signOut()
+
+    fun connectDB(onSuccess: () -> Unit, onFailure: (String) -> Unit)
 }

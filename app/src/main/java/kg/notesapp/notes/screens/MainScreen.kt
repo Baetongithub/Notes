@@ -28,6 +28,9 @@ import kg.notesapp.notes.navigation.NavRoute
 import kg.notesapp.notes.ui.theme.MainViewModel
 import kg.notesapp.notes.ui.theme.MainViewModelFactory
 import kg.notesapp.notes.ui.theme.NotesTheme
+import kg.notesapp.notes.utils.DB_TYPE
+import kg.notesapp.notes.utils.TYPE_ROOM
+import kg.notesapp.notes.utils.TYPE_REMOTE
 
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -48,6 +51,12 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
+    val noteID = when (DB_TYPE.value) {
+        TYPE_REMOTE -> note.firebaseID
+        TYPE_ROOM -> note.id
+        else -> ""
+    }
+
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 8.dp, horizontal = 24.dp)

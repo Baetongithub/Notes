@@ -23,13 +23,24 @@ import kg.notesapp.notes.navigation.NavRoute
 import kg.notesapp.notes.ui.theme.MainViewModel
 import kg.notesapp.notes.ui.theme.MainViewModelFactory
 import kg.notesapp.notes.ui.theme.NotesTheme
+import kg.notesapp.notes.utils.DB_TYPE
+import kg.notesapp.notes.utils.TYPE_ROOM
+import kg.notesapp.notes.utils.TYPE_REMOTE
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
     val notes = viewModel.readAllNotes()?.observeAsState(initial = listOf())?.value
-    val note = notes?.firstOrNull { it.id == noteId?.toInt() } ?: Note(title = "none", subtitle = "none")
+    val note = when (DB_TYPE.value) {
+        TYPE_ROOM -> {
+            notes?.firstOrNull { it.id == noteId?.toInt() } ?: Note()
+        }
+        TYPE_REMOTE -> {
+            notes?.firstOrNull { it.firebaseID == noteId } ?: Note()
+        }
+        else -> Note()
+    }
 
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -65,7 +76,8 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                             viewModel.update(note = Note(
                                 id = note.id,
                                 title = title,
-                                subtitle = subtitle)) {
+                                subtitle = subtitle,
+                                firebaseID = note.firebaseID)) {
                                 navController.navigate(NavRoute.Main.route)
                             }
                         }) {

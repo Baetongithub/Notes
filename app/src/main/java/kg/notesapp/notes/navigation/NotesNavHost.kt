@@ -1,9 +1,9 @@
 package kg.notesapp.notes.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import kg.notesapp.notes.screens.AddScreen
 import kg.notesapp.notes.screens.MainScreen
 import kg.notesapp.notes.screens.NoteScreen
@@ -18,8 +18,7 @@ sealed class NavRoute(val route: String) {
 }
 
 @Composable
-fun NotesNavHost(mViewModel: MainViewModel) {
-    val navController = rememberNavController()
+fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = NavRoute.Start.route) {
         composable(NavRoute.Start.route) { StartScreen(navController = navController, viewModel = mViewModel) }

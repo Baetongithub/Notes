@@ -22,4 +22,12 @@ class RoomRepo(private val noteDao: NoteDao) : DBRepository {
         noteDao.update(note)
         onSuccess()
     }
+
+    override fun signOut() {
+
+    }
+
+    override fun connectDB(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+
+    }
 }
